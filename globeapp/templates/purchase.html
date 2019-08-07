@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+      <div class="jumbotron">
+        <p class="lead">Purchase {{num}} tickets.</p>
+        <form action="{{ url_for('pay') }}" method="POST">
+          <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="{{ key }}"
+            data-amount="{{100*price}}"
+            data-name="Globe Theater"
+            data-image="{{image_path}}"
+            data-locale="auto"
+            data-currency="EUR">
+          </script>
+        </form>
+      </div>
+{% endblock content %}
+
+{% block purchaseblock %}
+
+{% endblock purchaseblock %}

@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="/home">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group">
+                {{ form.play_select.label(class="form-control-label") }}
+                {{ form.play_select(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.first_name.label(class="form-control-label") }}
+                {{ form.first_name(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.last_name.label(class="form-control-label") }}
+                {{ form.last_name(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label(class="form-control-label") }}
+                {% if form.email.errors %}
+                {{ form.email(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.email.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.email(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.ticket_select.label(class="form-control-label") }}
+                {{ form.ticket_select(class="form-control form-control-lg") }}
+            </div>
+        </fieldset>
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+
+    </form>
+        <script>
+        var play_select = document.getElementById("play_select");
+        var ticket_select = document.getElementById("ticket_select");
+        var btn = document.getElementById("submit");
+
+        // TODO write ONE function
+
+        play_select.onchange = function()  {
+
+            play = play_select.value;
+            current_ticket = ticket_select.value;
+
+            fetch('/ticket/' + play + '/' + current_ticket).then(function(response) {
+
+                response.json().then(function(data) {
+                    var optionHTML = '';
+
+                    for (var ticket of data.tickets) {
+                        optionHTML += '<option value="' + ticket.id + '">' + ticket.name + '</option>';
+                    }
+                    ticket_select.innerHTML = optionHTML;
+                })
+            });
+        };
+
+        btn.onclick = function()  {
+
+            play = play_select.value;
+            current_ticket = ticket_select.value;
+
+            fetch('/ticket/' + play + '/' + current_ticket).then(function(response) {
+
+                response.json().then(function(data) {
+                    var optionHTML = '';
+                    for (var ticket of data.tickets) {
+                        optionHTML += '<option value="' + ticket.id + '">' + ticket.name + '</option>';
+                    }
+                    ticket_select.innerHTML = optionHTML;
+                })
+            });
+         };
+    </script>
+</div>
+
+{% endblock content %}
+
+{% block purchaseblock %}
+
+    <div class="navbar-nav mr-auto">
+        <a class="nav-item nav-link" href="{{ url_for('purchase') }}">Purchase</a>
+        <a class="nav-item nav-link" href="{{ url_for('cancel') }}">Cancel</a>
+    </div>
+
+{% endblock purchaseblock %}
+

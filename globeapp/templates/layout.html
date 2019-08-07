@@ -1,0 +1,40 @@
+{% extends "base_layout.html" %}
+{% block main %}
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+        <div class="col-md-4">
+            <div class="content-section">
+                <h3>Booked Tickets</h3>
+                <ul class="list-group">
+                    {%for t,p in ticket_list%}
+                    <li class="list-group-item list-group-item-light">
+                        <span style="font-size:12pt">{{t}}</span><br>
+                        <span style="font-size:6pt">{{p}}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <li class="list-group-item list-group-item-light">Sum: {{price}}</li>
+                {% block purchaseblock %}
+
+                {% endblock purchaseblock %}
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock main%}
+
+
